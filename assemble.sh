@@ -1,19 +1,11 @@
-nasm -f bin -o bootloader.bin bootloader.asm
-nasm -f bin -o kernel_start.bin kernel_start.asm
+nasm -felf32 bootloader.asm -o boot.o
+i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+i686-elf-gcc -c stdio.c -o stdio.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+i686-elf-gcc -c tty.c -o tty.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+i686-elf-gcc -c string.c -o string.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
-dd if=/dev/zero of=OS.img bs=512 count=2880
 
-dd if=bootloader.bin of=OS.img bs=512 count=1 conv=notrunc
+i686-elf-gcc -T linker.ld -o basic_os.bin -ffreestanding -O2 -nostdlib boot.o kernel.o stdio.o tty.o string.o -lgcc
 
 
-# Compile kernel.c into binary
-bcc -ansi -0 -c -o kernel_main.o kernel.c
-ld86 -0 -d kernel_main.o -o kernel_main.bin
-
-# Add the start and main kernels together
-cat kernel_start.bin kernel_main.bin > kernel.bin
-
-dd if=kernel.bin of=OS.img bs=512 seek=1 conv=notrunc
-
-qemu-system-i386 -drive format=raw,file=OS.img,index=0,if=floppy
-
+qemu-system-i386 -kernel basic_os.bin -serial stdio
