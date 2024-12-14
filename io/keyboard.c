@@ -62,10 +62,12 @@ uint8_t read_key() {
             //setCursorPosition(getCursorX(), getCursorY()-1);
             break;
         case 75: // left
-            setCursorPosition(getCursorX()-1, getCursorY());
+            if (getCursorX() > 2)
+                setCursorPosition(getCursorX()-1, getCursorY());
             break;
         case 77: // right
-            setCursorPosition(getCursorX()+1, getCursorY());
+            if (getCursorX() < VGA_WIDTH - 1)
+                setCursorPosition(getCursorX()+1, getCursorY());
             break;
         case 80: // down
             //setCursorPosition(getCursorX(), getCursorY()+1);

@@ -9,6 +9,8 @@ void kernel_main(void)
 {
     terminal_initialize();
 
+    printf("Welcom to BasicOS!\nIt's very basic...\n\n");
+
     while (true) {
         query();
     }

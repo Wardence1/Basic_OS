@@ -54,3 +54,21 @@ void strCopy(char* to, const char* from) {
         to[i] = from[i];
     }
 }
+
+// Removes all spaces from the string
+// @todo needs malloc
+/*
+void strCut(char* str) {
+    char* temp = malloc(sizeof(char) * strlen(str));
+    strCopy(temp, str);
+    while (*str) {
+        if (*str != ' ') {
+            *temp = *str;
+            temp++;
+        }
+        str++;
+    }
+
+    strCopy(str, temp);
+}
+*/

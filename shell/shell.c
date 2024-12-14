@@ -17,6 +17,7 @@ void query() {
         character = read_key();
         if (character != 0) {
             putchar(character);
+            // make sure the cursor doesn't go out off the line
             if (getCursorX() < 2) {
                 setCursorPosition(2, queryPos);
             } else if(getCursorX() > VGA_WIDTH - 1) {
@@ -39,6 +40,7 @@ void query() {
     } else {
         setCursorPosition(0, getCursorY());
     }
+
     command(inputBuffer);
 }
 
