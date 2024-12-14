@@ -7,9 +7,6 @@
 #include "io/io.h"
 #include "stdio.h"
 
-static const int8_t VGA_WIDTH = 80;
-static const int8_t VGA_HEIGHT = 25;
-
 #define VGA_CMD_PORT  0x3D4
 #define VGA_DATA_PORT 0x3D5
 
@@ -133,6 +130,15 @@ void wrapScroll() {
         }
 
         terminal_row--;
+    }
+}
+
+void clearTerminal() {
+    
+    for (int i = 0; i < VGA_HEIGHT; i++) {
+        for (int j = 0; j < VGA_WIDTH-1; j++) {
+            terminal_buffer[i * VGA_WIDTH + j] = 0;
+        }
     }
 }
 

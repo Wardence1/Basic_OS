@@ -59,7 +59,7 @@ uint8_t read_key() {
             break;
         // Arrow keys
         case 72: // up
-            setCursorPosition(getCursorX(), getCursorY()-1);
+            //setCursorPosition(getCursorX(), getCursorY()-1);
             break;
         case 75: // left
             setCursorPosition(getCursorX()-1, getCursorY());
@@ -68,7 +68,7 @@ uint8_t read_key() {
             setCursorPosition(getCursorX()+1, getCursorY());
             break;
         case 80: // down
-            setCursorPosition(getCursorX(), getCursorY()+1);
+            //setCursorPosition(getCursorX(), getCursorY()+1);
             break;
     }
 
