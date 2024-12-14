@@ -5,6 +5,7 @@
 #include "tty.h"
 #include "stdbool.h"
 #include "io/io.h"
+#include "stdio.h"
 
 static const int8_t VGA_WIDTH = 80;
 static const int8_t VGA_HEIGHT = 25;
@@ -79,7 +80,7 @@ void terminal_putchar(char c)
         break;
     case '\b':
         terminal_column--;
-        backspace = true;
+        terminal_putentryat(' ', terminal_color, terminal_column, terminal_row);
         break;
     // Characters
     default:
@@ -89,10 +90,6 @@ void terminal_putchar(char c)
 
     wrapScroll();
 
-    if (backspace) {
-        terminal_putentryat(' ', terminal_color, terminal_column, terminal_row);
-        backspace = false;
-    }
 
     move_cursor(terminal_column, terminal_row);
 }
@@ -113,7 +110,7 @@ void wrapScroll() {
         terminal_column = 0;
         if (terminal_row > 0) {
             terminal_row--;
-            terminal_column = VGA_WIDTH;
+            terminal_column = VGA_WIDTH-1;
         }
     }
 

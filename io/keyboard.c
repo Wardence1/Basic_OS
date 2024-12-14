@@ -48,7 +48,6 @@ uint8_t read_key() {
 
     scancode = inb(KEYBOARD_DATA_PORT);
 
-
     // Arrow keys
     switch (scancode) {
         // Shift toggling
