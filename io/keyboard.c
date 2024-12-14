@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "../stdio.h"
 #include "keyboard.h"
 #include "io.h"
 #include "../string.h"
@@ -23,7 +24,8 @@ const char scancode_to_ascii[128] = {
     [24] = 'o', [25] = 'p', [26] = '[', [27] = ']',
     [30] = 'a', [31] = 's', [32] = 'd', [33] = 'f',
     [34] = 'g', [35] = 'h', [36] = 'j',
-    [37] = 'k', [38] = 'l', [39] = ';', [40] = '\'', [44] = 'z',
+    [37] = 'k', [38] = 'l', [39] = ';', [40] = '\'',
+    [43] = '\\', [44] = 'z',
     [45] = 'x', [46] = 'c', [47] = 'v', [48] = 'b',
     [49] = 'n', [50] = 'm', [51] = ',', [52] = '.',
     [53] = '/', [57] = ' ', [28] = '\n', [15] = '\t',
@@ -46,11 +48,29 @@ uint8_t read_key() {
 
     scancode = inb(KEYBOARD_DATA_PORT);
 
-    // Shift toggling
-    if (scancode == 0x2A) { // Shift's pressed
-        shift = true;
-    } else if (scancode == 0xAA) { // Shift's released
-        shift = false;
+
+    // Arrow keys
+    switch (scancode) {
+        // Shift toggling
+        case 0x2A: // shift got pressed
+            shift = true;
+            break;
+        case 0xAA: // shift got released
+            shift = false;
+            break;
+        // Arrow keys
+        case 72: // up
+            setCursorPosition(getCursorX(), getCursorY()-1);
+            break;
+        case 75: // left
+            setCursorPosition(getCursorX()-1, getCursorY());
+            break;
+        case 77: // right
+            setCursorPosition(getCursorX()+1, getCursorY());
+            break;
+        case 80: // down
+            setCursorPosition(getCursorX(), getCursorY()+1);
+            break;
     }
 
     // If valid convert the scancode to ascii and print

@@ -10,7 +10,6 @@ void kernel_main(void)
     terminal_initialize();
 
     int scanCode;
-    printf("Do \t tabs \t work?\n");
     while (true) {
         scanCode = read_key();
         if (scanCode != 0)
