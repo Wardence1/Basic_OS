@@ -8,7 +8,8 @@
 void query() {
     printf("> ");
     size_t queryPos = getCursorY();
-    setCursorPosition(3, queryPos);
+    int endBuffer = 0; // The end of the command being entered
+    setCursorPosition(2, queryPos);
 
     char character = 0;
     char inputBuffer[VGA_WIDTH];
@@ -16,16 +17,28 @@ void query() {
         character = read_key();
         if (character != 0) {
             putchar(character);
-            if (getCursorX() < 3) {
-                setCursorPosition(3, queryPos);
+            if (getCursorX() < 2) {
+                setCursorPosition(2, queryPos);
             } else if(getCursorX() > VGA_WIDTH - 1) {
                 setCursorPosition(VGA_WIDTH-1, queryPos);
             }
 
-            inputBuffer[getCursorX()-3] = character;
+            inputBuffer[getCursorX()-2] = character;
+            if (getCursorX()-2 > endBuffer) {
+                endBuffer = getCursorX()-2;
+            } 
         }
     }
-    putchar('\n');
+
+    popChar(inputBuffer, 0); // Get rid of the \n at the beginning
+    inputBuffer[endBuffer] = '\0'; // Add null operatior to input buffer
+
+    // https://www.youtube.com/watch?v=BXLAqEchBW0
+    if (getCursorY() != VGA_HEIGHT-1) {
+        putchar('\n');
+    } else {
+        setCursorPosition(0, getCursorY());
+    }
     command(inputBuffer);
 }
 

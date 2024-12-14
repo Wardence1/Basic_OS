@@ -87,7 +87,6 @@ void terminal_putchar(char c)
 
     wrapScroll();
 
-
     move_cursor(terminal_column, terminal_row);
 }
 
@@ -95,6 +94,11 @@ void terminal_write(const char* data, size_t size)
 {
     for (size_t i = 0; i < size; i++)
         terminal_putchar(data[i]);
+}
+
+// Gets the character at a selected position on the screen
+char getChar(int x, int y) {
+    return terminal_buffer[y * VGA_WIDTH + x];
 }
 
 // Wraps and scrolls the terminal
@@ -116,20 +120,22 @@ void wrapScroll() {
         terminal_row = 0;
     }
 
-    // scroll the screen
+    // scroll the terminal
     if (terminal_row >= VGA_HEIGHT) {
 
+        // move lines up by one
         for (size_t y=1; y<VGA_HEIGHT; y++) {
-            for (size_t x=0; x<VGA_WIDTH; x++)
-                terminal_buffer[(y-1) * VGA_WIDTH + x] = terminal_buffer[y * VGA_WIDTH + x];
+            for (size_t x=0; x<VGA_WIDTH; x++) {
+                terminal_putentryat(getChar(x, y), terminal_color, x, y-1);
+            }
         }
 
         // clear the last row
         for (size_t x=0; x<VGA_WIDTH; x++) {
-            terminal_buffer[(VGA_HEIGHT-1) * VGA_WIDTH + x] = 0;
+            terminal_putentryat(' ', terminal_color, x, VGA_HEIGHT-1);
         }
 
-        terminal_row--;
+        terminal_row = VGA_HEIGHT-1;
     }
 }
 
@@ -137,7 +143,7 @@ void clearTerminal() {
     
     for (int i = 0; i < VGA_HEIGHT; i++) {
         for (int j = 0; j < VGA_WIDTH-1; j++) {
-            terminal_buffer[i * VGA_WIDTH + j] = 0;
+            terminal_putentryat(' ', terminal_color, j, i);
         }
     }
 }

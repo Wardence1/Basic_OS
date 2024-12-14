@@ -34,6 +34,7 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y);
 void terminal_putchar(char c);
 void terminal_write(const char* data, size_t size);
 void clearTerminal();
+char getChar(int x, int y);
 void setCursorPosition(int8_t x, int8_t y);
 int8_t getCursorX();
 int8_t getCursorY();

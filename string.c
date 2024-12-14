@@ -34,3 +34,23 @@ bool cmpStr(const char* str1, const char* str2) {
     // Check if both strings ended (ensures they are the same length)
     return *str1 == '\0' && *str2 == '\0';
 }
+
+void popChar(char* str, size_t pos) {
+    if (str == NULL || str[pos] == '\0') {
+        // String is null or empty, nothing to do
+        return;
+    }
+    
+    // Shift all characters one position to the left
+    int i = pos;
+    while (str[i] != '\0') {
+        str[i] = str[i + 1];
+        i++;
+    }
+}
+
+void strCopy(char* to, const char* from) {
+    for (int i = 0; from[i] != '\0'; i++) {
+        to[i] = from[i];
+    }
+}

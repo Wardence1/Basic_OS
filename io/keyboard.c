@@ -87,3 +87,9 @@ uint8_t read_key() {
         return 0;
     }    
 }
+
+void clearKeyboardBuffer() {
+    while (inb(KEYBOARD_STATUS_PORT) & 0x01) {  // Check if output buffer is full
+        (void) inb(KEYBOARD_DATA_PORT);         // Read and discard the data
+    }
+}
