@@ -1,10 +1,15 @@
+/*
+    Terminal config
+*/
+
 #include "tty.h"
+#include "stdbool.h"
 
-static const size_t VGA_WIDTH = 80;
-static const size_t VGA_HEIGHT = 25;
+static const int8_t VGA_WIDTH = 80;
+static const int8_t VGA_HEIGHT = 25;
 
-size_t terminal_row;
-size_t terminal_column;
+int8_t terminal_row;
+int8_t terminal_column;
 uint8_t terminal_color;
 uint16_t* terminal_buffer;
 
@@ -52,6 +57,12 @@ void terminal_putchar(char c)
     case '\r':
         terminal_column = 0;
         break;
+    case '\t':
+        terminal_column += 4;
+        break;
+    case '\b':
+        terminal_column--;
+        break;
     // Characters
     default:
         terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
@@ -62,6 +73,12 @@ void terminal_putchar(char c)
     if (terminal_column >= VGA_WIDTH) {
         terminal_column = 0;
         terminal_row++;
+    } else if (terminal_column < 0) {
+        terminal_column = 0;
+        if (terminal_row > 0) {
+            terminal_row--;
+            terminal_column = VGA_WIDTH;
+        }
     }
     // scroll the screen
     if (terminal_row >= VGA_HEIGHT) {
