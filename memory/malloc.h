@@ -4,4 +4,5 @@
 
 #include <stddef.h>
 
-void* malloc(size_t bytes);
+// @todo
+//void* malloc(size_t bytes);

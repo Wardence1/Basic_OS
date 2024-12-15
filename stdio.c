@@ -76,3 +76,8 @@ void printf(const char* fmt, ...) {
 	va_end(ap);
 
 }
+
+void println(const char* str) {
+	printf(str);
+	putchar('\n');
+}

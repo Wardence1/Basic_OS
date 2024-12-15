@@ -6,11 +6,12 @@
 #include "io/io.h"
 #include "shell/shell.h"
 #include "interrupts/idt.h"
+#include "files/file.h"
 
 void kernel_main(void) 
 {
-    idt_init();
-
+    //idt_init();
+    filesInit();
     terminal_initialize();
 
     printf("Welcome to BasicOS!\nIt's very basic...\n\n");

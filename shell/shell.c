@@ -41,15 +41,35 @@ void query() {
         setCursorPosition(0, getCursorY());
     }
 
+    strCut(inputBuffer);
     command(inputBuffer);
 }
 
 // Takes command and calls a syscall
 void command(const char* cmd) {
+
+    char fWord[50]; // first word, hehe
+    char sWord[50]; // second word
+    char tWord[50]; // second word
+
+    getWord(cmd, 0, fWord); // get the first word
+    getWord(cmd, 1, sWord); // get the second word
+    getWord(cmd, 2, tWord); // get the third word
+
     if (cmpStr(cmd, "clear")) {
         clearTerminal();
         setCursorPosition(0, 0);
+
+    } else if (cmpStr(cmd, "ls")) {
+        listFiles();
+
+    } else if (cmpStr(fWord, "touch")) {
+        if (strlen(sWord) > MAX_FILE_NAME_LEN) substring(sWord, 0, MAX_FILE_NAME_LEN);
+        createFile(sWord, tWord);
+
     } else if (cmpStr(cmd, "help")) {
         printf("\"clear\" - clears the terminal\n");
+        printf("\"ls\" - lists all files\n");
+        printf("\"touch\" - touch creates a file\n");
     }
 }
