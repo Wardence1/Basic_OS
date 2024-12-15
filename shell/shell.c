@@ -49,5 +49,7 @@ void command(const char* cmd) {
     if (cmpStr(cmd, "clear")) {
         clearTerminal();
         setCursorPosition(0, 0);
+    } else if (cmpStr(cmd, "help")) {
+        printf("\"clear\" - clears the terminal\n");
     }
 }
