@@ -5,6 +5,8 @@
 #include "shell.h"
 
 // Asks for input
+// @todo fix the terminal scrolling input issue
+// @todo Fix the quotes on title reading issue
 void query() {
     printf("> ");
     size_t queryPos = getCursorY();
@@ -12,7 +14,7 @@ void query() {
     setCursorPosition(2, queryPos);
 
     char character = 0;
-    char inputBuffer[VGA_WIDTH];
+    char inputBuffer[VGA_WIDTH+5]; // the +5 is for memory safety
     while (character != '\n') {
         character = read_key();
         if (character != 0) {
@@ -31,8 +33,14 @@ void query() {
         }
     }
 
+    int xPos;
+    for (xPos = 1; xPos < VGA_WIDTH-1; xPos++) {
+        inputBuffer[xPos] = getChar(xPos, queryPos);
+    }
+
     popChar(inputBuffer, 0); // Get rid of the \n at the beginning
-    inputBuffer[endBuffer] = '\0'; // Add null operatior to input buffer
+    inputBuffer[xPos+1] = '\0';
+
 
     // https://www.youtube.com/watch?v=BXLAqEchBW0
     if (getCursorY() != VGA_HEIGHT-1) {
@@ -64,10 +72,11 @@ void command(const char* cmd) {
         listFiles();
 
     } else if (cmpStr(fWord, "touch")) {
-        //truncateString(sWord, MAX_FILE_NAME_LEN);
+        if (strlen(sWord) > MAX_FILE_NAME_LEN) printf("The title can be at most %d characters long.\n", MAX_FILE_NAME_LEN);
+        truncateString(sWord, MAX_FILE_NAME_LEN);
         createFile(sWord, tWord);
 
-    } else if (cmpStr(fWord, "touch")) {
+    } else if (cmpStr(fWord, "rm")) {
         rmFile(sWord);
 
     } else if (cmpStr(cmd, "help")) {

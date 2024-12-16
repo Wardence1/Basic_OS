@@ -86,38 +86,66 @@ void strCut(char* str) {
     str[i] = '\0';
 }
 
+// Text surrouned by quotes counts as a word
 void getWord(const char* str, int position, char* word) {
     int i = 0, j = 0, wordCount = 0;
+    bool inQuotes = false;  // Flag to track if we are inside quotes
 
     // Iterate through the string
     while (str[i] != '\0') {
-        // Skip any spaces between words
-        while (str[i] == ' ') {
+        // Skip spaces if not inside quotes
+        while (str[i] == ' ' && !inQuotes) {
             i++;
         }
 
-        // If we've reached the desired word
-        if (wordCount == position) {
-            // Copy characters of the word to 'word' array
-            while (str[i] != ' ' && str[i] != '\0') {
-                word[j++] = str[i++];
+        // If we've reached a non-space character
+        if (str[i] != '\0') {
+            // Handle quoted text
+            if (str[i] == '"') {
+                inQuotes = !inQuotes;  // Toggle inQuotes flag
+                i++;  // Move past the quote
+                if (!inQuotes) {
+                    // Closing quote reached
+                    word[j] = '\0';  // Null-terminate the word
+                    return;
+                }
             }
-            word[j] = '\0';  // Null-terminate the word
-            return;
-        }
 
-        // Skip the current word
-        while (str[i] != ' ' && str[i] != '\0') {
-            i++;
-        }
+            // Check if this is the desired word
+            if (wordCount == position) {
+                while ((inQuotes || (str[i] != ' ' && str[i] != '\0')) && str[i] != '"') {
+                    word[j++] = str[i++];
+                }
 
-        wordCount++;  // Move to the next word
+                // If we exit quotes, advance the pointer
+                if (str[i] == '"') {
+                    i++;
+                }
+
+                word[j] = '\0';  // Null-terminate the word
+                return;
+            }
+
+            // Skip the current word or quoted text
+            while ((inQuotes || (str[i] != ' ' && str[i] != '\0')) && str[i] != '"') {
+                i++;
+            }
+
+            // If we exit quotes, advance the pointer
+            if (str[i] == '"') {
+                i++;
+            }
+
+            // Increment word count if we're exiting a word
+            if (!inQuotes) {
+                wordCount++;
+            }
+        }
     }
 
-    // If the position is out of bounds (word doesn't exist), return an empty string
+    // If the word at the position doesn't exist, return an empty string
     word[0] = '\0';
 }
-
 
 void substring(char *source, int start, int length) {
     int i, sourceLength = strlen(source);
