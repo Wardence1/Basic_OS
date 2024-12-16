@@ -12,5 +12,6 @@ void strCopy(char* to, const char* from);
 void strCut(char* str);
 void getWord(const char* str, int position, char* word);
 void substring(char *source, int start, int length);
+void truncateString(char *str, int maxLength);
 
 #endif

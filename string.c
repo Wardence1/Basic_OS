@@ -49,10 +49,17 @@ void popChar(char* str, size_t pos) {
     }
 }
 
-void strCopy(char* to, const char* from) {
-    for (int i = 0; from[i] != '\0'; i++) {
+void strCopy(char *to, const char *from) {
+    int i = 0;
+
+    // Copy each character from the source to the destination
+    while (from[i] != '\0') {
         to[i] = from[i];
+        i++;
     }
+
+    // Null-terminate the destination string
+    to[i] = '\0';
 }
 
 // Removes spaces at the beginning and end of the string
@@ -127,4 +134,12 @@ void substring(char *source, int start, int length) {
     }
 
     source[i] = '\0'; // Null-terminate the modified source string
+}
+
+
+void truncateString(char *str, int maxLength) {
+    // Check if the string is longer than the desired length
+    if (strlen(str) > (size_t)maxLength) {
+        str[maxLength] = '\0'; // Null-terminate the string at the specified length
+    }
 }

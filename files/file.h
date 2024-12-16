@@ -4,7 +4,7 @@
 #include "../string.h"
 
 #define MAX_FILES 10
-#define MAX_FILE_NAME_LEN 10
+#define MAX_FILE_NAME_LEN 50
 
 void createFile(char* name, char* content);
 void filesInit();

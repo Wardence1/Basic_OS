@@ -64,12 +64,16 @@ void command(const char* cmd) {
         listFiles();
 
     } else if (cmpStr(fWord, "touch")) {
-        if (strlen(sWord) > MAX_FILE_NAME_LEN) substring(sWord, 0, MAX_FILE_NAME_LEN);
+        //truncateString(sWord, MAX_FILE_NAME_LEN);
         createFile(sWord, tWord);
+
+    } else if (cmpStr(fWord, "touch")) {
+        rmFile(sWord);
 
     } else if (cmpStr(cmd, "help")) {
         printf("\"clear\" - clears the terminal\n");
         printf("\"ls\" - lists all files\n");
-        printf("\"touch\" - touch creates a file\n");
+        printf("\"touch\" + file name + file contents - touch creates a file\n");
+        printf("\"rm\" + file name - removes the specified file\n");
     }
 }

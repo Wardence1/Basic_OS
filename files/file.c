@@ -11,10 +11,10 @@ typedef struct {
     char content[50];
 } file;
 
-file files[MAX_FILES - 1];
+file files[MAX_FILES];
 
 void filesInit() {
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < MAX_FILES; i++) {
         files[i].name[0] = '\0';
     } 
 }
