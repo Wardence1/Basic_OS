@@ -22,8 +22,8 @@ void query() {
             // make sure the cursor doesn't go out off the line
             if (getCursorX() < 2) {
                 setCursorPosition(2, queryPos);
-            } else if(getCursorX() > VGA_WIDTH - 1) {
-                setCursorPosition(VGA_WIDTH-1, queryPos);
+            } else if(getCursorX() > VGA_WIDTH - 2) {
+                setCursorPosition(VGA_WIDTH-2, queryPos);
             }
 
             inputBuffer[getCursorX()-2] = character;

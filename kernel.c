@@ -14,7 +14,7 @@ void kernel_main(void)
     filesInit();
     terminal_initialize();
 
-    printf("Welcome to BasicOS!\nIt's very basic...\n\n");
+    printf("Welcome to BasicOS!\nEnter \"help\" for... help\n\n");
 
     while (true) {
         query();
