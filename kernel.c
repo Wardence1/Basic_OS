@@ -7,10 +7,12 @@
 #include "shell/shell.h"
 #include "interrupts/idt.h"
 #include "files/file.h"
+#include "gdt/gdt.h"
 
 void kernel_main(void) 
 {
     //idt_init();
+    initGdt();
     filesInit();
     terminal_initialize();
 
