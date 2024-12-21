@@ -45,7 +45,7 @@
                      SEG_PRIV(3)     | SEG_DATA_RDWR
 
 
-uint16_t gdt[5];
+uint64_t gdt[5];
 
 void create_descriptor(uint8_t index, uint32_t base, uint32_t limit, uint16_t flag)
 {
@@ -69,14 +69,14 @@ void create_descriptor(uint8_t index, uint32_t base, uint32_t limit, uint16_t fl
 }
 
 struct {
-    uint32_t base;
     uint16_t limit;
+    uint32_t base;
 } __attribute__((packed)) gdtr;
 
 void lgdt(void* gdt, uint16_t size) {
     gdtr.base = (uint32_t)gdt;
     gdtr.limit = size-1;
-    asm __volatile__("lgdt (%0)" : : "r" (&gdtr));
+    asm __volatile__("lgdt %0" : : "m" (gdtr));
 }
 
 void initGdt() {
@@ -86,7 +86,7 @@ void initGdt() {
     create_descriptor(3, 0, 0x000FFFFF, (GDT_CODE_PL3));
     create_descriptor(4, 0, 0x000FFFFF, (GDT_DATA_PL3));
 
-    lgdt(&gdt, sizeof(gdt)-1);
+    lgdt(&gdt, sizeof(gdt));
     extern void reloadSegments();
-    //reloadSegments();
+    reloadSegments();
 }
