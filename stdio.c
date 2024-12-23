@@ -19,6 +19,7 @@ void printf(const char* fmt, ...) {
 
     int ival; // integer value
     double fval; // floating point value
+    char* sval; // string value
     char buffer[65];
     
     va_start(ap, fmt);
@@ -156,6 +157,19 @@ void printf(const char* fmt, ...) {
                 break;
             }
 
+                // String
+            case 's': {
+                sval = va_arg(ap, char*);
+                if (sval) {
+                    while (*sval) {
+                        terminal_putchar(*sval++);
+                    }
+                } else {
+                    terminal_write("(null)", 6);
+                }
+                break;
+            }
+
             default:
                 terminal_write("\nError: Unrecognized format specifier!!! ):<\n", 48);
             }
@@ -166,6 +180,7 @@ void printf(const char* fmt, ...) {
 
     va_end(ap);
 }
+
 
 void println(const char* str) {
 	printf(str);
