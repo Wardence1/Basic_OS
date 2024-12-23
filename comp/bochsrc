@@ -1,0 +1,14 @@
+# Example bochsrc file
+
+# CPU and memory configuration
+megs: 32
+cpu: model=bx_generic
+
+# Boot settings
+boot: cdrom
+
+# Define the CD-ROM drive
+ata1-slave: type=cdrom, path="myos.iso", status=inserted
+
+# Graphics and user interface
+display_library: x
