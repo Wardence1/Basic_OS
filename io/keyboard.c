@@ -2,12 +2,7 @@
     Functions for keyboard input
 */
 
-#include <stdint.h>
-#include <stdbool.h>
-#include "../stdio.h"
 #include "keyboard.h"
-#include "io.h"
-#include "../string.h"
 
 
 #define KEYBOARD_STATUS_PORT 0x64
@@ -39,7 +34,7 @@ const char ascii_to_special[128] = {
     [';'] = ':', ['\''] = '"',
 };
 
-uint8_t read_key() {
+u8 read_key() {
     unsigned char scancode;
     unsigned char ascii;
 

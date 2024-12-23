@@ -10,20 +10,20 @@
 #define VGA_CMD_PORT  0x3D4
 #define VGA_DATA_PORT 0x3D5
 
-int8_t terminal_row;
-int8_t terminal_column;
-uint8_t terminal_color;
-uint16_t* terminal_buffer;
+s8 terminal_row;
+s8 terminal_column;
+u8 terminal_color;
+u16* terminal_buffer;
 bool backspace = false; // Is true if backspace is pressed
 
 
-static inline uint16_t vga_entry(unsigned char uc, uint8_t color) 
+static inline u16 vga_entry(unsigned char uc, u8 color) 
 {
-    return (uint16_t) uc | (uint16_t) color << 8;
+    return (u16) uc | (u16) color << 8;
 }
 
-void move_cursor(uint8_t x, uint8_t y) {
-    uint16_t position = y * VGA_WIDTH + x;
+void move_cursor(u8 x, u8 y) {
+    u16 position = y * VGA_WIDTH + x;
 
     // Send the high byte of the cursor position
     outb(VGA_CMD_PORT, 0x0E);       // Select high byte register
@@ -40,7 +40,7 @@ void terminal_initialize(void)
     terminal_column = 0;
     move_cursor(terminal_row, terminal_column);
     terminal_color = VGA_COLOR_LIGHT_GREY;
-    terminal_buffer = (uint16_t*) 0xB8000;
+    terminal_buffer = (u16*) 0xB8000;
     for (size_t y = 0; y < VGA_HEIGHT; y++) {
         for (size_t x = 0; x < VGA_WIDTH; x++) {
             const size_t index = y * VGA_WIDTH + x;
@@ -50,12 +50,12 @@ void terminal_initialize(void)
 }
 
 
-void terminal_setcolor(uint8_t color) 
+void terminal_setcolor(u8 color) 
 {
     terminal_color = color;
 }
 
-void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) 
+void terminal_putentryat(char c, u8 color, size_t x, size_t y) 
 {
     const size_t index = y * VGA_WIDTH + x;
     terminal_buffer[index] = vga_entry(c, color);
@@ -148,17 +148,17 @@ void clearTerminal() {
     }
 }
 
-void setCursorPosition(int8_t x, int8_t y) {
+void setCursorPosition(s8 x, s8 y) {
     terminal_column = x;
     terminal_row = y;
     wrapScroll();
     move_cursor(terminal_column, terminal_row);
 }
 
-int8_t getCursorX() {
+s8 getCursorX() {
     return terminal_column;
 }
 
-int8_t getCursorY() {
+s8 getCursorY() {
     return terminal_row;
 }

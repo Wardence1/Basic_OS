@@ -1,5 +1,10 @@
-#include <stdint.h>
+#ifndef IDT
+#define IDT
+
+#include "../types.h"
 #include "../io/io.h"
 #include "../stdio.h"
 
-void idt_init();
+void initIdt();
+
+#endif

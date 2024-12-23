@@ -1,6 +1,5 @@
 #ifndef STDIO
 #define STDIO
-#include <stdint.h>
 #include "tty.h"
 
 void printf(const char* fmt, ...);

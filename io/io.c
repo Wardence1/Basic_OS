@@ -8,8 +8,8 @@
 // These functions provide direct hardware port access
 
 // Read a byte from a specified I/O port
-uint8_t inb(uint16_t port) {
-    uint8_t result;
+u8 inb(u16 port) {
+    u8 result;
     
     // Inline assembly to read from port
     // "=a" (result) - output operand, storing result in eax
@@ -24,7 +24,7 @@ uint8_t inb(uint16_t port) {
 }
 
 // Write a byte to a specified I/O port
-void outb(uint16_t port, uint8_t data) {
+void outb(u16 port, u8 data) {
     // Inline assembly to write to port
     // "a" (data) - input operand, value to write in eax
     // "d" (port) - input operand, port number in edx
@@ -37,8 +37,8 @@ void outb(uint16_t port, uint8_t data) {
 }
 
 // Read a 16-bit word from a port
-uint16_t inw(uint16_t port) {
-    uint16_t result;
+u16 inw(u16 port) {
+    u16 result;
     
     __asm__ volatile (
         "in %%dx, %%ax"  // Read 16-bit word from port
@@ -50,7 +50,7 @@ uint16_t inw(uint16_t port) {
 }
 
 // Write a 16-bit word to a port
-void outw(uint16_t port, uint16_t data) {
+void outw(u16 port, u16 data) {
     __asm__ volatile (
         "out %%ax, %%dx"  // Write 16-bit word to port
         :

@@ -2,7 +2,8 @@
 #define TTY
 
 #include <stddef.h>
-#include <stdint.h>
+#include "types.h"
+
 
 /* Hardware text mode color constants. */
 enum vga_color {
@@ -24,19 +25,19 @@ enum vga_color {
     VGA_COLOR_WHITE = 15,
 };
 
-static const int8_t VGA_WIDTH = 80;
-static const int8_t VGA_HEIGHT = 25;
+static const s8 VGA_WIDTH = 80;
+static const s8 VGA_HEIGHT = 25;
 
 void terminal_initialize(void);
-void terminal_setcolor(uint8_t color);
+void terminal_setcolor(u8 color);
 void wrapScroll();
-void terminal_putentryat(char c, uint8_t color, size_t x, size_t y);
+void terminal_putentryat(char c, u8 color, size_t x, size_t y);
 void terminal_putchar(char c);
 void terminal_write(const char* data, size_t size);
 void clearTerminal();
 char getChar(int x, int y);
-void setCursorPosition(int8_t x, int8_t y);
-int8_t getCursorX();
-int8_t getCursorY();
+void setCursorPosition(s8 x, s8 y);
+s8 getCursorX();
+s8 getCursorY();
 
 #endif

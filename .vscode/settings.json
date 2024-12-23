@@ -3,6 +3,7 @@
         "*.s": "nasm",
         "io.h": "c",
         "stdbool.h": "c",
-        "idt.h": "c"
+        "idt.h": "c",
+        "stdint.h": "c"
     }
 }

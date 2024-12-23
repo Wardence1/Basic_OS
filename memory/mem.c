@@ -5,8 +5,8 @@
 #include "mem.h"
 
 int memcmp(const void* aptr, const void* bptr, size_t size) {
-	const uint8_t* a = (const uint8_t*) aptr;
-	const uint8_t* b = (const uint8_t*) bptr;
+	const u8* a = (const u8*) aptr;
+	const u8* b = (const u8*) bptr;
 	for (size_t i = 0; i < size; i++) {
 		if (a[i] < b[i])
 			return -1;
@@ -17,15 +17,15 @@ int memcmp(const void* aptr, const void* bptr, size_t size) {
 }
 
 void* memset(void* bufptr, int value, size_t size) {
-	uint8_t* buf = (uint8_t*) bufptr;
+	u8* buf = (u8*) bufptr;
 	for (size_t i = 0; i < size; i++)
-		buf[i] = (uint8_t) value;
+		buf[i] = (u8) value;
 	return bufptr;
 }
 
 void* memcpy(void* restrict dstptr, const void* restrict srcptr, size_t size) {
-	uint8_t* dst = (uint8_t*) dstptr;
-	const uint8_t* src = (const uint8_t*) srcptr;
+	u8* dst = (u8*) dstptr;
+	const u8* src = (const u8*) srcptr;
 	for (size_t i = 0; i < size; i++)
 		dst[i] = src[i];
 	return dstptr;

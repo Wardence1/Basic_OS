@@ -45,11 +45,11 @@
                      SEG_PRIV(3)     | SEG_DATA_RDWR
 
 
-uint64_t gdt[5];
+u64 gdt[5];
 
-void create_descriptor(uint8_t index, uint32_t base, uint32_t limit, uint16_t flag)
+void create_descriptor(u8 index, u32 base, u32 limit, u16 flag)
 {
-    uint64_t descriptor;
+    u64 descriptor;
  
     // Create the high 32 bit segment
     descriptor  =  limit       & 0x000F0000;         // set limit bits 19:16
@@ -65,16 +65,15 @@ void create_descriptor(uint8_t index, uint32_t base, uint32_t limit, uint16_t fl
     descriptor |= limit  & 0x0000FFFF;               // set limit bits 15:0
  
     gdt[index] = descriptor;
-    printf("%llx\n", descriptor);
 }
 
 struct {
-    uint16_t limit;
-    uint32_t base;
+    u16 limit;
+    u32 base;
 } __attribute__((packed)) gdtr;
 
-void lgdt(void* gdt, uint16_t size) {
-    gdtr.base = (uint32_t)gdt;
+void lgdt(void* gdt, u16 size) {
+    gdtr.base = (u32)gdt;
     gdtr.limit = size-1;
     asm __volatile__("lgdt %0" : : "m" (gdtr));
 }
