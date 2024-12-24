@@ -12,3 +12,4 @@ ata1-slave: type=cdrom, path="Basic_OS.iso", status=inserted
 
 # Graphics and user interface
 display_library: x
+log: bochs.log

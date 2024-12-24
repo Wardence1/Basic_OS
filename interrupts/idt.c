@@ -78,37 +78,31 @@ void init_idt() {
 #define ICW4_8086    0x01
 
 // Initialize the Programmable Interrupt Controller (PIC)
-void remap_pic(int offset1, int offset2) {
-    u8 a1, a2;
-
-    // Save masks
-    a1 = inb(PIC1_DATA);
-    a2 = inb(PIC2_DATA);
-
-    // Start the initialization sequence (ICW1)
+void remap_pic() {
+    // Start initialization of PIC
     outb(PIC1_COMMAND, ICW1_INIT | ICW1_ICW4);
     outb(PIC2_COMMAND, ICW1_INIT | ICW1_ICW4);
 
-    // Set vector offsets (ICW2)
-    outb(PIC1_DATA, offset1); // Master PIC vector offset
-    outb(PIC2_DATA, offset2); // Slave PIC vector offset
+    // Set vector offsets
+    outb(PIC1_DATA, 0x20);  // Master PIC offset
+    outb(PIC2_DATA, 0x28);  // Slave PIC offset
 
-    // Tell the PICs how they are connected (ICW3)
-    outb(PIC1_DATA, 0x04); // Master has a slave on IRQ2
-    outb(PIC2_DATA, 0x02); // Slave is connected to master IRQ2
+    // Configure cascading
+    outb(PIC1_DATA, 0x04);
+    outb(PIC2_DATA, 0x02);
 
-    // Set the mode to 8086/88 (ICW4)
+    // Set to 8086/88 mode
     outb(PIC1_DATA, ICW4_8086);
     outb(PIC2_DATA, ICW4_8086);
 
-    // Restore saved masks
-    outb(PIC1_DATA, a1);
-    outb(PIC2_DATA, a2);
+    // Unmask all interrupts (optional)
+    outb(PIC1_DATA, 0x0);
+    outb(PIC2_DATA, 0x0);
 }
 
 
 // Initialize the IDT and PIC
 void initIdt() {
-    remap_pic(0x20, 0x28);
+    remap_pic();
     init_idt();
 }
