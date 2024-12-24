@@ -11,7 +11,7 @@
 void kernel_main(void) 
 {
     initGdt();
-    initIdt();
+    initPICIDT();
     filesInit();
     terminal_initialize();
 

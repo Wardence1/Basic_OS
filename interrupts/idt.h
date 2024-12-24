@@ -5,6 +5,6 @@
 #include "../io/io.h"
 #include "../stdio.h"
 
-void initIdt();
+void initPICIDT();
 
 #endif

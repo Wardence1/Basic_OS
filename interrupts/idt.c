@@ -55,6 +55,25 @@ bool vectors[IDT_MAX_DESCRIPTORS];
 
 extern void* isr_stub_table[];
 
+
+#define PIC1_COMMAND 0x20
+#define PIC1_DATA    0x21
+#define PIC2_COMMAND 0xA0
+#define PIC2_DATA    0xA1
+
+// @todo GET THIS DONE NOW!!!!!
+void timer_isr() {
+    // Acknowledge the PIC (send EOI)
+    outb(PIC2_COMMAND, 0x20);  // Acknowledge interrupt to PIC 2
+
+    // Send EOI to PIC 1 (master)
+    outb(PIC1_COMMAND, 0x20);  // Acknowledge interrupt to PIC 1
+
+    println("lasdjfsd");
+
+    asm __volatile__ ("iret");
+}
+
 void init_idt() {
     idtr.base = (uintptr_t)&idt[0];
     idtr.limit = (u16)sizeof(idtEntry) * IDT_MAX_DESCRIPTORS - 1;
@@ -64,45 +83,43 @@ void init_idt() {
         vectors[vector] = true;
     }
 
+    // Set the PIC Timer interrupt
+    idt_set_descriptor(0x20, timer_isr, 0x8E);
+    vectors[0x20] = true;
+
     asm __volatile__ ("lidt %0" : : "m"(idtr)); // load the new IDT
     asm __volatile__ ("sti"); // set the interrupt flag
 }
 
-#define PIC1_COMMAND 0x20
-#define PIC1_DATA    0x21
-#define PIC2_COMMAND 0xA0
-#define PIC2_DATA    0xA1
-
-#define ICW1_INIT    0x10
-#define ICW1_ICW4    0x01
-#define ICW4_8086    0x01
-
-// Initialize the Programmable Interrupt Controller (PIC)
 void remap_pic() {
-    // Start initialization of PIC
-    outb(PIC1_COMMAND, ICW1_INIT | ICW1_ICW4);
-    outb(PIC2_COMMAND, ICW1_INIT | ICW1_ICW4);
+    // Save current masks
+    uint8_t mask1 = inb(PIC1_DATA);
+    uint8_t mask2 = inb(PIC2_DATA);
 
-    // Set vector offsets
-    outb(PIC1_DATA, 0x20);  // Master PIC offset
-    outb(PIC2_DATA, 0x28);  // Slave PIC offset
+    // Start initialization in cascade mode
+    outb(PIC1_COMMAND, 0x11);
+    outb(PIC2_COMMAND, 0x11);
 
-    // Configure cascading
-    outb(PIC1_DATA, 0x04);
-    outb(PIC2_DATA, 0x02);
+    // Remap IRQs: IRQ 0-7 to 0x20-0x27, IRQ 8-15 to 0x28-0x2F
+    outb(PIC1_DATA, 0x20);
+    outb(PIC2_DATA, 0x28);
 
-    // Set to 8086/88 mode
-    outb(PIC1_DATA, ICW4_8086);
-    outb(PIC2_DATA, ICW4_8086);
+    // Cascade setup
+    outb(PIC1_DATA, 0x04); // Tell Master PIC there is a slave at IRQ 2
+    outb(PIC2_DATA, 0x02); // Tell Slave PIC its cascade identity
 
-    // Unmask all interrupts (optional)
-    outb(PIC1_DATA, 0x0);
-    outb(PIC2_DATA, 0x0);
+    // Set 8086/88 (MCS-80/85) mode
+    outb(PIC1_DATA, 0x01);
+    outb(PIC2_DATA, 0x01);
+
+    // Restore saved masks
+    outb(PIC1_DATA, mask1);
+    outb(PIC2_DATA, mask2);
 }
 
 
 // Initialize the IDT and PIC
-void initIdt() {
+void initPICIDT() {
     remap_pic();
     init_idt();
 }

@@ -1,3 +1,6 @@
+#ifndef KEYBOARD
+#define KEYBOARD
+
 #include "../types.h"
 #include <stdbool.h>
 #include "../stdio.h"
@@ -6,4 +9,5 @@
 
 u8 read_key();
 void clearKeyboardBuffer();
-void key_test();
+
+#endif

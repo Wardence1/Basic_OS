@@ -1,3 +1,6 @@
+#ifndef SHELL
+#define SHELL
+
 #include <stddef.h>
 #include "../tty.h"
 #include "../stdio.h"
@@ -7,3 +10,5 @@
 
 void query();
 void command(const char*);
+
+#endif

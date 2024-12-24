@@ -1,7 +1,6 @@
 global isr_stub_table
 extern exception_handler
 
-
 section .text:
 
     %macro isr_err_stub 1
@@ -60,8 +59,8 @@ section .text:
     isr_no_err_stub 31
 
     isr_stub_table:
-    %assign i 0 
-    %rep    32 
-        dd isr_stub_%+i ; use DQ instead if targeting 64-bit
-    %assign i i+1 
+    %assign i 0
+    %rep    32
+        dd isr_stub_%+i
+    %assign i i+1
     %endrep
