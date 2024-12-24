@@ -8,7 +8,7 @@ cpu: model=bx_generic
 boot: cdrom
 
 # Define the CD-ROM drive
-ata1-slave: type=cdrom, path="myos.iso", status=inserted
+ata1-slave: type=cdrom, path="Basic_OS.iso", status=inserted
 
 # Graphics and user interface
 display_library: x

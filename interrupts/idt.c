@@ -38,6 +38,7 @@ void exception_handler(int vector_number, uint32_t error_code) {
     asm __volatile__("cli; hlt");
 }
 
+__attribute__((aligned(16)))
 idtEntry idt[IDT_MAX_DESCRIPTORS];
 
 void idt_set_descriptor(u8 vector, void* isr, u8 flags) {
