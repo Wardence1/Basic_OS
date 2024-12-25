@@ -61,17 +61,29 @@ extern void* isr_stub_table[];
 #define PIC2_COMMAND 0xA0
 #define PIC2_DATA    0xA1
 
-// @todo GET THIS DONE NOW!!!!!
-void timer_isr() {
+#ifdef __x86_64__
+typedef unsigned long long int uword_t;
+#else
+typedef unsigned int uword_t;
+#endif
+
+struct interrupt_frame
+{
+    uword_t ip;
+    uword_t cs;
+    uword_t flags;
+    uword_t sp;
+    uword_t ss;
+};
+
+
+__attribute__((interrupt))
+void timer_isr(struct interrupt_frame* frame) {
     // Acknowledge the PIC (send EOI)
-    outb(PIC2_COMMAND, 0x20);  // Acknowledge interrupt to PIC 2
+    //outb(PIC2_COMMAND, 0x20);  // Acknowledge interrupt to PIC 2
 
     // Send EOI to PIC 1 (master)
-    outb(PIC1_COMMAND, 0x20);  // Acknowledge interrupt to PIC 1
-
-    println("You're in the timer isr.");
-
-    asm __volatile__ ("iret");
+    //outb(PIC1_COMMAND, 0x20);  // Acknowledge interrupt to PIC 1
 }
 
 void init_idt() {
