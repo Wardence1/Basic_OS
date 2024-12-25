@@ -79,10 +79,10 @@ void idt_set_descriptor(u8 vector, void* isr, u8 flags) {
 void timer_handler(void) {
     // Acknowledge the PIC (send EOI)
     // Only send PIC to slave if IRQ number is >= 8
-    // outb(PIC2_COMMAND, 0x20);  // Acknowledge interrupt to PIC 2
+    // outb(PIC2_COMMAND, 0x20);  // Acknowledge interrupt to slave PIC
 
     // Send EOI to master PIC
-    outb(PIC1_COMMAND, 0x20);  // Acknowledge interrupt to PIC 1
+    outb(PIC1_COMMAND, 0x20);  // Acknowledge interrupt to master PIC
 
     println("You're in the timer isr.");
 }
