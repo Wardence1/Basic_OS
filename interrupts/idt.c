@@ -69,7 +69,7 @@ void timer_isr() {
     // Send EOI to PIC 1 (master)
     outb(PIC1_COMMAND, 0x20);  // Acknowledge interrupt to PIC 1
 
-    println("lasdjfsd");
+    println("You're in the timer isr.");
 
     asm __volatile__ ("iret");
 }
