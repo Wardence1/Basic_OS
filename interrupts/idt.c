@@ -2,6 +2,10 @@
 #include <stdbool.h>
 
 #define IDT_MAX_DESCRIPTORS 256
+extern void* isr_stub_table[];
+
+typedef void (*isr_handler_t)(void);
+isr_handler_t vectors[IDT_MAX_DESCRIPTORS];
 
 typedef struct {
     u16    isr_low;      // The lower 16 bits of the ISR's address
@@ -28,14 +32,29 @@ void exception_handler(int vector_number, uint32_t error_code) {
         "Machine Check", "SIMD Floating-Point Exception"
     };
 
-    if (vector_number < 20) {
-        printf("Error: \"%s\" (Vector: %d, Error Code: 0x%x)\n",
-               exception_names[vector_number], vector_number, error_code);
+    if (vector_number >= 32 && vector_number < 48) {
+        // If there is an ISR handler registered call it
+        if (vectors[vector_number])
+            vectors[vector_number]();
+        else
+            printf("Unhandled IRQ%d received\n", vector_number);
+
+    } else if (vector_number < 20) {
+        // If there is an ISR handler registered call it
+        if (vectors[vector_number])
+            vectors[vector_number]();
+        else {
+            printf("Exception: \"%s\" (Vector: %d, Error Code: 0x%x)\n",
+                   exception_names[vector_number], vector_number, error_code);
+
+            asm __volatile__("cli; hlt");
+        }
     } else {
-        printf("Exception: Reserved or Unknown (Vector: %d, Error Code: 0x%08X)\n",
+        printf("Exception/Interrupt: Reserved or Unknown (Vector: %d, Error Code: 0x%0X)\n",
                vector_number, error_code);
+
+        asm __volatile__("cli; hlt");
     }
-    asm __volatile__("cli; hlt");
 }
 
 __attribute__((aligned(16)))
@@ -51,41 +70,33 @@ void idt_set_descriptor(u8 vector, void* isr, u8 flags) {
     descriptor->reserved       = 0;
 }
 
-bool vectors[IDT_MAX_DESCRIPTORS];
-
-extern void* isr_stub_table[];
-
-
 #define PIC1_COMMAND 0x20
 #define PIC1_DATA    0x21
 #define PIC2_COMMAND 0xA0
 #define PIC2_DATA    0xA1
 
 // @todo GET THIS DONE NOW!!!!!
-void timer_isr() {
+void timer_handler() {
     // Acknowledge the PIC (send EOI)
-    outb(PIC2_COMMAND, 0x20);  // Acknowledge interrupt to PIC 2
+    // Only send PIC to slave if IRQ number is >= 8
+    // outb(PIC2_COMMAND, 0x20);  // Acknowledge interrupt to PIC 2
 
-    // Send EOI to PIC 1 (master)
+    // Send EOI to master PIC
     outb(PIC1_COMMAND, 0x20);  // Acknowledge interrupt to PIC 1
 
-    println("lasdjfsd");
-
-    asm __volatile__ ("iret");
+    printf("tick ");
 }
 
 void init_idt() {
     idtr.base = (uintptr_t)&idt[0];
-    idtr.limit = (u16)sizeof(idtEntry) * IDT_MAX_DESCRIPTORS - 1;
+    idtr.limit = (u16)sizeof(idt) - 1;
 
-    for (u8 vector = 0; vector < 32; vector++) {
+    for (u8 vector = 0; vector < 48; vector++)
         idt_set_descriptor(vector, isr_stub_table[vector], 0x8E);
-        vectors[vector] = true;
-    }
 
-    // Set the PIC Timer interrupt
-    idt_set_descriptor(0x20, timer_isr, 0x8E);
-    vectors[0x20] = true;
+    // The vectors array will already be initialized to NULL
+    // Set the handler for each vector we wish to process
+    vectors[0x20] = timer_handler;
 
     asm __volatile__ ("lidt %0" : : "m"(idtr)); // load the new IDT
     asm __volatile__ ("sti"); // set the interrupt flag
