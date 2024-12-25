@@ -84,7 +84,7 @@ void timer_handler(void) {
     // Send EOI to master PIC
     outb(PIC1_COMMAND, 0x20);  // Acknowledge interrupt to PIC 1
 
-    printf("tick ");
+    println("You're in the timer isr.");
 }
 
 void init_idt() {
