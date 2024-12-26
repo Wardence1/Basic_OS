@@ -17,7 +17,9 @@ void kernel_main(void)
 
     printf("Welcome to BasicOS!\nEnter \"help\" for... help\n\n");
 
+
     while (true) {
-        query();
+        //query();
+        asm __volatile__("hlt");
     }
 }

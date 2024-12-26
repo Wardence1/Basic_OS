@@ -7,6 +7,7 @@
 // Asks for input
 // @todo fix the terminal scrolling input issue
 // @todo Fix the quotes on title reading issue
+/*
 void query() {
     printf("> ");
     size_t queryPos = getCursorY();
@@ -85,4 +86,4 @@ void command(const char* cmd) {
         printf("\"touch\" + file name + file contents - touch creates a file\n");
         printf("\"rm\" + file name - removes the specified file\n");
     }
-}
+}*/
