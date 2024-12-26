@@ -23,6 +23,5 @@ cp grub.cfg isodir/boot/grub/grub.cfg
 grub-mkrescue -o Basic_OS.iso isodir
 
 # Open the .iso file with bochs
-bochs -q -f bochsrc
-#qemu-system-i386 -cdrom Basic_OS.iso
-#qemu-system-i386 -kernel build/myos.bin
+#bochs -q -f bochsrc
+qemu-system-i386 -cdrom Basic_OS.iso

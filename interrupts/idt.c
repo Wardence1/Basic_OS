@@ -157,10 +157,12 @@ void keyboard_isr(struct interrupt_frame* frame) {
         ascii = scancode_to_ascii[scancode];
         if (shift) {
             // return special characters: !, @, #, ect.
-            if (findIn("!@#$%^&*()_+{}|:\"", ascii_to_special[ascii]))
+            if (findIn("!@#$%^&*()_+{}|:\"", ascii_to_special[ascii])) {
                 putchar(ascii_to_special[ascii]);
-            // capitilize letters
-            putchar(ascii + ('A' - 'a')); 
+            } else {
+                // capitilize letters
+                putchar(ascii + ('A' - 'a'));
+            }
         } else
             putchar(ascii); 
     } 
