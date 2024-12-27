@@ -5,7 +5,7 @@ i686-elf-gcc -c ../stdio.c -o build/stdio.o -std=gnu99 -ffreestanding -O2 -Wall 
 i686-elf-gcc -c ../tty.c -o build/tty.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 i686-elf-gcc -c ../string.c -o build/string.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 i686-elf-gcc -c ../io/io.c -o build/io.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
-i686-elf-gcc -c ../io/keyboard.c -o build/keyboard.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+i686-elf-gcc -c ../io/keyboard.c -o build/keyboard.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -mgeneral-regs-only
 i686-elf-gcc -c ../shell/shell.c -o build/shell.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 i686-elf-gcc -c ../memory/mem.c -o build/mem.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 nasm -felf32 ../interrupts/idt.s -o build/idts.o

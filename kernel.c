@@ -19,7 +19,6 @@ void kernel_main(void)
 
 
     while (true) {
-        //query();
         asm __volatile__("hlt");
     }
 }

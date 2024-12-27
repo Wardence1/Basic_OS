@@ -7,7 +7,4 @@
 #include "io.h"
 #include "../string.h"
 
-u8 read_key();
-void clearKeyboardBuffer();
-
 #endif

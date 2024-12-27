@@ -4,9 +4,9 @@
 
 #include "shell.h"
 
+// This currently isn't be used, bash will be ported later on.
 // Asks for input
-// @todo fix the terminal scrolling input issue
-// @todo Fix the quotes on title reading issue
+
 /*
 void query() {
     printf("> ");
